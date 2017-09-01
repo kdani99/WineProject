@@ -1,0 +1,32 @@
+---
+title: "Wine Quality"
+output: html_document
+---
+```{r}
+setwd("/Users/andy/desktop");getwd()
+mydata <- read.csv("wine.train.csv")
+####decision tree
+library(rpart)
+##grow tree 
+fitDT<-rpart(quality~color+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+free.sulfur.dioxide + total.sulfur.dioxide+density+pH+sulphates+alcohol,
+            method="anova",data=mydata)
+summary(fitDT)
+######
+printcp(fitDT)#display the results
+plotcp(fitDT)#visualize cross-validation results
+summary(fitDT)#detailed summary of splits
+
+par(mfrow=c(1,2))#two plots on one page
+rsq.rpart(fitDT)
+plot(fitDT,uniform=TRUE,main="Wine Quality");text(fitDT,use.n=TRUE, all=TRUE,cex=0.6)
+```
+```{r}
+####Random Forest
+setwd("/Users/andy/desktop");getwd()
+mydata <- read.csv("wine.train.csv")
+install.packages("randomForest")
+library(randomForest)
+fitRF<-randomForest(quality~color+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+free.sulfur.dioxide + total.sulfur.dioxide+density+pH+sulphates+alcohol,data=mydata)
+print(fitRF)
+importance(fitRF)
+```
